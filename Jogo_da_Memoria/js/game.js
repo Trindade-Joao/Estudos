@@ -1,4 +1,7 @@
 const grid = document.querySelector('.grid');
+const spanPlayer = document.querySelector('.player');
+const timer = document.querySelector('.timer');
+const pontos = document.querySelector('.pontos');
 
 const personagens = [
     'beth',
@@ -11,7 +14,7 @@ const personagens = [
     'rick',
     'scroopy',
     'summer'
-]
+];
 
 const createElement = (tag, className) => {
 
@@ -28,17 +31,20 @@ const checaFimDeJogo = () => {
     const disabledCards = document.querySelectorAll('.disabled-card');
 
     if(disabledCards.length === 20){
-        alert('Parabéns, você conseguiu!');
+        clearInterval(this.loop);
+        alert(`Parabéns, ${spanPlayer.innerHTML}! Seu tempo foi: ${timer.innerHTML} segundos!`);
     }
 }
 
 const checaCarta = () => {
     const primeiroPersonagem = primeiraCarta.getAttribute('data-personagem');
     const segundoPersonagem = segundaCarta.getAttribute('data-personagem');
+    const pontosAtuais = +pontos.innerHTML;
 
     if (primeiroPersonagem === segundoPersonagem) {
         primeiraCarta.firstChild.classList.add('disabled-card');
         segundaCarta.firstChild.classList.add('disabled-card');
+        pontos.innerHTML = pontosAtuais + 10;
 
         primeiraCarta = '';
         segundaCarta = '';
@@ -50,6 +56,7 @@ const checaCarta = () => {
             
             primeiraCarta.classList.remove('revela-carta');
             segundaCarta.classList.remove('revela-carta');
+            pontos.innerHTML = pontosAtuais - 2;
 
             primeiraCarta = '';
             segundaCarta = '';
@@ -83,13 +90,13 @@ const creatCard = (personagem) => {
     const front = createElement('div', 'face front');
     const back = createElement('div', 'face back');
 
-    front.style.backgroundImage = `url('../images/${personagem}.png')`
+    front.style.backgroundImage = `url('../images/${personagem}.png')`;
 
     card.appendChild(front);
     card.appendChild(back);
 
     card.addEventListener('click', revelaCarta);
-    card.setAttribute('data-personagem', personagem)
+    card.setAttribute('data-personagem', personagem);
 
     return card;
 }
@@ -108,4 +115,20 @@ const loadGame = () => {
     });
 }
 
-loadGame();
+const startTimer = () => {
+
+    this.loop = setInterval(() => {
+
+        const currentTime = +timer.innerHTML;
+        timer.innerHTML = currentTime + 1;
+
+    }, 1000);
+}
+
+window.onload = () => {    
+    spanPlayer.innerHTML = localStorage.getItem('player');
+    startTimer();
+
+    loadGame();
+}
+

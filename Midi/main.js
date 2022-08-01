@@ -1,4 +1,14 @@
 const listaDeTeclas = document.querySelectorAll('.tecla');
+const body = document.querySelector('body');
+const botaoTemaEscuro = document.querySelector('.dark_mode_btn');
+
+botaoTemaEscuro.onclick = () => {
+    if (body.classList[0] === 'dark'){
+        body.classList.remove('dark');
+    }else{
+        body.classList.add('dark');
+    }
+}
 
 function tocaSom(seletorAudio) {
     const elemento = document.querySelector(seletorAudio);
